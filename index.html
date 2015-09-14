@@ -359,7 +359,7 @@
           <section data-markdown>
             <script type="text/template">
               ##Creating a Container
-              Using **`docker run`**
+              Using `docker run`
               <br>
               <br>
               Syntax:
@@ -553,7 +553,7 @@
             <script type="text/template">
               ##Run Instruction
               - Each RUN instruction will execute the command on the top writable layer and perform a commit of the image
-              - Can aggregate multiple RUN instructions by using `"&&"`
+              - Can aggregate multiple RUN instructions by using `&&`
 
               Example:
               ```
@@ -566,15 +566,14 @@
             <script type="text/template">
               ##Docker Build
               - Syntax
-              ```
-              docker build [options] [path]
-              ```
+              <br>
+              `docker build [options] [path]`
               - Common option to tag the build
-              ```
-              docker build -t [repository:tag] [path]
-              ```
+              <br>
+              `docker build -t [repository:tag] [path]`
 
               -t is for tag
+              <br>
               Path is the build context.
 
             </script>
@@ -605,7 +604,7 @@
           <section data-markdown>
             <script type="text/template">
               output
-              ```
+              ```bash
               bash-3.2$ cat Dockerfile 
               FROM ubuntu:14.04
               RUN apt-get update && apt-get install -y vim
@@ -636,7 +635,7 @@
               - Can only be specified once in a Dockerfile
               - **Can be overridden at run time**
 
-              ```
+              ```bash
               #Shell format
               CMD ping 127.0.0.1 -c 30
               #Exec format (json)
@@ -649,13 +648,13 @@
             <script type="text/template">
               ###Example
 
-              ```
+              ```bash
               bash-3.2$ cat Dockerfile 
               FROM ubuntu:14.04
               RUN apt-get update && apt-get install -y vim
               CMD ["ping", "127.0.0.1", "-c", "30"]
               ```
-              ```
+              ```bash
               bash-3.2$ docker build -t lodelestra/buildprojectt:1.1 .
               Sending build context to Docker daemon 2.048 kB
               Step 0 : FROM ubuntu:14.04
@@ -690,14 +689,14 @@
             <script type="text/template">
               ###Example
               Dockerfile
-              ```
+              ```bash
               bash-3.2$ cat Dockerfile 
               FROM ubuntu:14.04
               RUN apt-get update && apt-get install -y vim
               ENTRYPOINT ["ping"]
               ```
               build the image
-              ```
+              ```bash
               bash-3.2$ docker build -t lodelestra/buildproject:1.2 .
               Sending build context to Docker daemon 2.048 kB
               Step 0 : FROM ubuntu:14.04
@@ -717,7 +716,7 @@
           <section data-markdown>
             <script type="text/template">
               how to use it
-              ```
+              ```bash
               bash-3.2$ docker run lodelestra/buildproject:1.2
               Usage: ping [-aAbBdDfhLnOqrRUvV] [-c count] [-i interval] [-I interface]
                           [-m mark] [-M pmtudisc_option] [-l preload] [-p pattern] [-Q tos]
@@ -749,9 +748,9 @@
             <script type="text/template">
               ##Start and Stop Containers
               - Find your containers first with docker ps and note the ID or name
-              - **docker start** and **docker stop**
+              - 'docker start' and 'docker stop'
 
-              ```
+              ```bash
               $ docker ps -a
               $ docker start <container ID>
               $ docker stop <container ID>
@@ -793,11 +792,11 @@
             <script type="text/template">
               ##Renaming Tagging Images
 
-              **`docker tag [image ID] [repo:tag]`**
+              `docker tag [image ID] [repo:tag]`
               <br>
               or
               <br>
-              **`docker tag [local repo:tag] [Docker Hub repo:tag]`**
+              `docker tag [local repo:tag] [Docker Hub repo:tag]`
             </script>
           </section>
         
@@ -814,7 +813,7 @@
             <script type="text/template">
               ##Pushing images to Docker Hub
 
-              Use **`docker push`** command
+              Use `docker push` command
 
               ```
               docker push [repo:tag]

@@ -1,3 +1,7 @@
+.reveal code {
+    background:lightgrey;
+}
+
 .me {
     margin: 0 !important;
     text-align: center !important;
