@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Docker</title>
+
+    <meta name="description" content="cours d'introduction a l'administration system">
+    <meta name="author" content="Loic Delestra">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" ></meta>
+    <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> -->
+
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"> -->
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+    <link rel="stylesheet" href="css/custom.css">
+
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            # Docker 
+            From docker official training by Johnny Tu 
+          </script>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #1. Introduction 
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##WHAT IS IT ?
+              Docker is a platform for developing, shipping and running applications using container virtualization technology.
+              <br>
+              <br>
+              The Docker Platform consists of multiple tools.
+              <br>
+              <br>
+              Docker 
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##WHAT IS IT ?
+              Docker is an open-source project that automates the deployment of applications inside software containers, by providing an additional layer of abstraction and automation of operating-system-level virtualization on Linux, Mac OS and Windows.
+
+              <br>
+              Wikipedia
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #history
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+              ##One application on one physical server
+              <img src="img/docker_one_app_one_server.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Problems
+              - slow deployment times
+              - Huge costs
+              - Wasted resources
+              - Difficult to scale or migrate
+              - Vendor lock in
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ## Hypervisor-based Virtualization
+              - One physical server can contain multiple applications
+              - Each application runs in a virtual machine
+              
+              <img src="img/docker_hypervisor_based_virtualization.png" alt="">
+
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##BENEFITS
+              - Better resource pooling
+                - one physical machine divided into multiple VM
+              - Easier to scale
+              - VM's in the cloud
+                - Pay as you go
+            </script>
+          </section>
+
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Limitations
+              - Each VM stills requires
+                - CPU allocation
+                - storage
+                - RAM
+                - An entire guest operation system
+              - More VM's you run, the more resources you need
+              - Guest OS means wasted resources
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Containers
+              >Container based virtualization uses the kernel on the host's operating system to run multiple guest instances
+
+              - Each guest instance is called a container
+              - Each container has its own
+                - Root filesystem
+                - Processes
+                - Memory
+                - Network ports
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Containers
+              <img src="img/docker_containers_oskernel.png" alt="">
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+              ##Containers vs VMs
+              - Containers are more lightweight
+              - No need to install guest OS
+              - Less CPU, RAM, storage space required
+              - More containers per machine than VMs
+              - Greater portability
+            </script>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #2. Concepts and Terms 
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker and the Linux Kernel
+              - **Docker Engine** (deamon) is the program that enables containers to be built, shipped and run.
+              
+              <img src="img/docker_linux_kernel.png" alt="">
+            </script>
+          </section>
+
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Installation
+              For your training work docker is already installed in your machine.
+              <!-- todo add lazy cat -->
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ####Linux:
+              ```
+              wget -qO- https://get.docker.com/ | sh
+              ```
+              ####Windows and Mac OS X:
+              Docker need linux kernel... so you will need a linux Virtual Machine.
+              Docker toolbox contains everything needed.
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Verify docker installation
+              ```
+              $ docker run hello-world
+              ```
+              This command download and run an hello world container
+
+              /\*lets try\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker Client and Daemon
+              - client / server architecture
+              - Client takes user inputs and send them to the daemon
+              - Daemon builds, runs, and distributes containers
+              - Client and daemon can run on same or different hosts
+            </script>
+          </section>
+
+          <section>
+          <img src="img/docker_client_daemon.png" alt="">
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Checking Client and Daemon Version
+              ```
+              $ docker version
+              ```
+              /\*lets see\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Images and Containers
+              **Images**
+              - Read only template used to create containers
+              - Built by you or other Docker users
+              - Stored in the Docker Hub or your local Registry
+
+              **Containers**
+              - Isolated application platform
+              - Contains everything needed to run your application
+              - Based on images
+
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Registry and Repository
+              Registry is where we store images. Registry can be private or public (Docker Hub)
+              Repositories are inside Registry
+              <img src="img/docker_registry_repository.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker Orchestration
+              Three tools for orchestrating distributed applications with Docker
+              - Docker Machine
+                - Tool that provisions Docker hosts and installs the Docker Engine on them
+              - Docker Swarm
+                - Tool that clusters many Engines and schedules containers
+              - Docker Compose
+                - Tool to create and manage multi-container applications
+            </script>
+          </section>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #3. Images
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ## Search for Images on Docker Hub
+              - lots of Images available for use
+              - Images reside in various Repositories
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              https://hub.docker.com/explore/
+              <img src="img/docker_explore_official_repo.png" alt="">
+            </script>
+          </section>
+
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Display Local Images
+              ```
+              $ docker images
+              ```
+              - When creating a container, docker will attempt to use a local image first
+              - If no local image is found, the Docker daemon will look in Docker Hub unless another registry is specified.
+              <br>
+              <br>
+              /\*lets take a look\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Image Tags
+              - Images are specified by repository:tag
+              - The same image may have multiple tags
+              - Default tag is `latest`
+              <br>
+              <br>
+              Classically Tags are version or tools
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Available tags for **java** image
+              <img src="img/docker_java_tags.png" alt="">
+
+            </script>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #4. Getting Started with Containers
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Creating a Container
+              Using **`docker run`**
+              <br>
+              <br>
+              Syntax:
+              ```
+              $ docker run [options] [image] [command] [args]
+              ```
+              - image is specified with repository:tag
+
+              <br>
+              examples:
+              ```
+              docker run ubuntu:14.04 ps aux
+              ```
+              /\*Demo time\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Container with Terminal
+              Use some options:
+              - `-i` flag tells docker to connect to STDIN on the container
+              - `-t` flag specifies to get a pseudo-terminal
+
+              ###Example
+              ```
+              docker run -i -t ubuntu /bin/bash
+              ```
+              /\*Demo time. Adding user\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Container Processes
+              - A container only runs as long as the process from your command is running
+              - Your command's process is always PID 1 inside the container
+              <!-- exit container without stop ctrl+p+q -->
+            </script>
+          </section>
+
+          <section>
+              <img src="img/docker_container_processes.png" alt="">
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Container ID
+              - Containers can be specified using their ID or name
+              - Long ID and short ID
+              - Short ID and name can be obtained using `docker ps` command to list containers
+              - Long ID obtained by inspecting a container
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Find your Containers
+              - use `docker ps` to list running containers
+              - use `docker ps -a` to list all containers (includes containers that are stopped)
+
+              /\*Take a look\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Running in Detached Mode
+              - Also know as running in the background or as a daemon
+              - Use -d flag
+              - To observe output use docker logs [container id]
+
+              <br>
+              Example:
+              ```
+              docker run -d ubuntu ping 127.0.0.1 -c 50
+
+              ```
+
+              /\*Take a look\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Ports mapping
+              - Run a web application inside a container
+              - The -P flag to map container ports to host ports
+
+              <br>
+              Example:
+              ```
+              $ docker run -d -P tomcat
+              ```
+              /\*Take a look\*/
+            </script>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #5. Building images
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Image Layers
+              - Images are comprised of multiple layers
+              - A layer is also just another image
+              - Every image contains a base layer
+              - Docker uses a copy on write system
+              - Layers are read only
+            </script>
+          </section>
+
+          <section>
+            <img src="img/docker_image_layers.png" alt="">
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##The Container Writable Layer
+              - Docker creates a top writable layer for containers
+              - Parent images are read only
+              - All changes are made at the writeable layer
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker commit
+              - **docker commit** command saves changes in a container as a new image
+
+              ```
+              docker commit [options] [container ID] [repository:tag]
+              ```
+
+              - Repository name should be based on username/application
+              - Can reference the container with container name instead of ID
+
+              ```
+              docker commit <id> lodelestra/vim:1.0
+              ```
+
+              >note default tag is latest
+
+              /\*lets try commit and run\*/
+            </script>
+          </section>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #6. Dockerfile
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Intro to Dockerfile
+              >A **Dockerfile** is a configuration file that contains instructions for building a Docker image
+
+              - Provides a more effective way to build images compared to using docker commit
+              - Easily fits into your continuous integration and deployment process
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Dockerfile instructions
+              - Instructions specify what to do when building the image
+              - FROM instruction specifies what the base image should be
+              - RUN instruction specifies a command to execute
+
+              Example:
+              ```
+              FROM ubuntu:14.04
+              RUN apt-get install -y vim
+              RUN apt-get install -y curl
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Run Instruction
+              - Each RUN instruction will execute the command on the top writable layer and perform a commit of the image
+              - Can aggregate multiple RUN instructions by using `"&&"`
+
+              Example:
+              ```
+              RUN apt-get update && apt-get install -y curl vim
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker Build
+              - Syntax
+              ```
+              docker build [options] [path]
+              ```
+              - Common option to tag the build
+              ```
+              docker build -t [repository:tag] [path]
+              ```
+
+              -t is for tag
+              Path is the build context.
+
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Build context
+              - When you reference files inside instructions it must be file in your build context.
+              - When building docker client will tar files from the context and send it to the docker daemon.
+              - Thats also where docker will look for your Dockerfile.<br>By default its the file named Dockerfile in the root of the context (for a different one use -f option)
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              Example
+              ```
+              $ docker build -t lodelestra/vim:1.2 .
+              #or
+              $ docker build -t lodelestra/vim:1.2 vim_project
+              ```
+
+              /\*lets try\*/
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              output
+              ```
+              bash-3.2$ cat Dockerfile 
+              FROM ubuntu:14.04
+              RUN apt-get update && apt-get install -y vim
+
+              bash-3.2$ docker build -t lodelestra/buildproject:1.0 .
+              Sending build context to Docker daemon 2.048 kB
+              Step 0 : FROM ubuntu:14.04
+               ---> 91e54dfb1179
+              Step 1 : RUN apt-get update && apt-get install -y vim
+               ---> Running in 54c85fe3bed4
+               ...
+               #install logs
+               ...
+               ---> 58c42776c9b7
+              Removing intermediate container 54c85fe3bed4
+              Successfully built 58c42776c9b7
+              ```
+            </script>
+          </section>
+
+
+          <section data-markdown>
+            <script type="text/template">
+              ##CMD Instruction
+              - CMD defines a default command to execute when a container is created
+              - CMD performs no action during the image build
+              - Shell format and EXEC format
+              - Can only be specified once in a Dockerfile
+              - **Can be overridden at run time**
+
+              ```
+              #Shell format
+              CMD ping 127.0.0.1 -c 30
+              #Exec format (json)
+              CMD ["ping", "127.0.0.1", "-c", "30"]
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Example
+
+              ```
+              bash-3.2$ cat Dockerfile 
+              FROM ubuntu:14.04
+              RUN apt-get update && apt-get install -y vim
+              CMD ["ping", "127.0.0.1", "-c", "30"]
+              ```
+              ```
+              bash-3.2$ docker build -t lodelestra/buildprojectt:1.1 .
+              Sending build context to Docker daemon 2.048 kB
+              Step 0 : FROM ubuntu:14.04
+               ---> 91e54dfb1179
+              Step 1 : RUN apt-get update && apt-get install -y vim
+               ---> Using cache
+               ---> 58c42776c9b7
+              Step 2 : CMD ping 127.0.0.1 -c 30
+               ---> Running in 13829d762189
+               ---> 8637e2fd41fd
+              Removing intermediate container 13829d762189
+              Successfully built 8637e2fd41fd
+              bash-3.2$  
+              ```
+              Adding a layer is very faster than building first image
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###ENTRYPOINT Instruction
+              - Defines the command that will run when a container is executed
+              - Run time arguments and CMD instruction are passed as parameters to the ENTRYPOINT instruction
+              - Shell and EXEC form
+              - EXEC form preferred as shell form cannot accept arguments at run time
+              - Container essentially runs as an executable
+              - ENTRYPOINT cant be override at runtime
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Example
+              Dockerfile
+              ```
+              bash-3.2$ cat Dockerfile 
+              FROM ubuntu:14.04
+              RUN apt-get update && apt-get install -y vim
+              ENTRYPOINT ["ping"]
+              ```
+              build the image
+              ```
+              bash-3.2$ docker build -t lodelestra/buildproject:1.2 .
+              Sending build context to Docker daemon 2.048 kB
+              Step 0 : FROM ubuntu:14.04
+               ---> 91e54dfb1179
+              Step 1 : RUN apt-get update && apt-get install -y vim
+               ---> Using cache
+               ---> 58c42776c9b7
+              Step 2 : ENTRYPOINT ping
+               ---> Running in d8ffe9f42f9d
+               ---> 4f940463520e
+              Removing intermediate container d8ffe9f42f9d
+              Successfully built 4f940463520e
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              how to use it
+              ```
+              bash-3.2$ docker run lodelestra/buildproject:1.2
+              Usage: ping [-aAbBdDfhLnOqrRUvV] [-c count] [-i interval] [-I interface]
+                          [-m mark] [-M pmtudisc_option] [-l preload] [-p pattern] [-Q tos]
+                          [-s packetsize] [-S sndbuf] [-t ttl] [-T timestamp_option]
+                          [-w deadline] [-W timeout] [hop1 ...] destination
+              bash-3.2$ docker run lodelestra/buildproject:1.2 127.0.0.1 -c 10
+              PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+              64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.032 ms
+              #...
+              64 bytes from 127.0.0.1: icmp_seq=10 ttl=64 time=0.038 ms
+
+              --- 127.0.0.1 ping statistics ---
+              10 packets transmitted, 10 received, 0% packet loss, time 8996ms
+              rtt min/avg/max/mdev = 0.032/0.041/0.050/0.004 ms
+              ```
+            </script>
+          </section>
+        </section>
+
+        <section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              #7. Managing Images and Containers
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Start and Stop Containers
+              - Find your containers first with docker ps and note the ID or name
+              - **docker start** and **docker stop**
+
+              ```
+              $ docker ps -a
+              $ docker start <container ID>
+              $ docker stop <container ID>
+              ```
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Getting terminal access
+              - Use docker `exec` command to **start another process** within a container
+              - Execute /bin/bash to get a bash shell
+              - `docker exec -i -t [container ID] /bin/bash`
+              - Exiting from the terminal will **not** terminate the container
+              
+              /\*lets try with tomcat\*/
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Deleting Containers
+              - Can only delete containers that have been stopped
+              - Use `docker rm` command
+              - Specify the container ID or name
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Deleting local Images
+              - Use docker rmi command
+              - **docker rmi [image ID]**<br>or<br>**docker rmi [repo:tag]**
+              - if an image is tagged multiple times, you have to delete each tag
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Renaming Tagging Images
+
+              **`docker tag [image ID] [repo:tag]`**
+              <br>
+              or
+              <br>
+              **`docker tag [local repo:tag] [Docker Hub repo:tag]`**
+            </script>
+          </section>
+        
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker Hub Repositories
+              - Users can create their own repositories on Docker Hub
+              - Public and Private (one free)
+              - Push local images to a repository
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Pushing images to Docker Hub
+
+              Use **`docker push`** command
+
+              ```
+              docker push [repo:tag]
+              ```
+              <br>
+              - Local repo must have same name and tag as the Docker Hub repo
+            </script>
+          </section>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #8. Volumes
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Volumes
+              >A volumes is a designated directory in a container, wich is designed to persist data, independent of the container's file cycle
+
+              - Volume changes are excluded when updating an image
+              - Persist when a container is deleted
+              - Can be mapped to a host folder
+              - Can be shared between containers
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Mount a Volume
+              - Volumes are mounted when creating or executing a container
+              - Can be mapped to a host directory
+              - Volume paths specified must be absolute
+
+              ```
+              #Execute a new container and mount the folder /myvolume into its file system
+              docker run -d -P -v /mycolume nginx:1.9.4
+              #Execute a new container and map the /data/src folder from the host into the /test/src folder in the container
+              docker run -i -t -v /data/src:/test/src nginx:1.9.4
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Volumes in Dockerfile
+              - VOLUME instruction creates a mount point
+              - Can specify arguments JSON array or string
+              - Cannot map volumes to host directories
+              - Volumes are initialized when the container is executed
+              
+              ```
+              #String example
+              VOLUME /myvol
+              #String example with multiple volumes
+              VOLUME /www/website1.com /www/website2.com
+              #JSON example
+              VOLUME ["myvol", "myvol2"]
+              ```
+
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Uses of volumes
+              - De-couple the data that is stored from the container which created the data (exemple logs)
+              - Good for sharing data between containers
+                - Can setup a data containers which has a volume you mount in other containers
+              - Mounting folders from the host is good for testing purpose but generally not recommended for production use
+            </script>
+          </section>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #9. Container Networking Basics
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Mapping ports
+              - **Recall:** containers have their own network and IP address
+              - Map exposed container ports to ports on the host machine
+              - Ports can be manually mapped or auto mapped
+              - Uses the -p and -P parameters in `docker run`
+
+              ```
+              #Maps port 80 on the container to 8080 on the host
+              docker run -d -p 8080:80 nginx:1.9.4
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Automapping ports
+              - Use the -P option in **docker run**
+              - Automatically maps exposed ports in the container to a port number in the host
+              - Host port numbers used go from 49153 to 65535
+              - Only work for ports defined in the EXPOSE instruction
+
+              ```
+              #Auto map ports exposed by the NGINX container to a port value on the host
+              docker run -d -P nginx:1.9.4
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##EXPOSE instruction
+              - Configures which ports a container will listen on at runtime
+              - Ports still need to be mapped when container is executed
+
+              ```
+              FROM ubuntu:14.04
+              RUN apt-get update
+              RUN apt-get install -y nginx
+
+              EXPOSE 80 443
+
+              CMD ["nginx","-g","daemon off;"]
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Linking Containers
+              >**Linking** is a communication method between containers which allows them to securely transfer data trom one to another
+
+              - Source and recipient containers
+              - Recipient containers have access to data on source containers
+              - Links are established based on container names
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              <img src="img/docker_linking_containers.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Creating a Link
+              1. Create the source container first (database)
+              2. Create the recipient container and use the --link option
+
+              ```
+              #Create the source container using the postgres
+              docker run -d --name database postgres
+
+              #Create the recipient container and link it
+              docker run -d -P --name website --link database:db nginx
+              # "db" is an alias added in /etc/hosts
+              ```
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Uses of Linking
+              - Containers can talk to each other without having to expose ports to the host
+              - Essential for micro service application architecture 
+              - Example:
+                - Container with Tomcat running
+                - Container with MySQL running
+                - Application on Tomcat needs to connect to MySQL
+            </script>
+          </section>
+        </section>
+
+        <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #10. Docker in Continuous Integration
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Traditional Continuous Integration
+              <img src="img/docker_traditional_continuous_integration.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Using Docker in CI. method 1
+              - CI server builds Docker image and pushes into Docker Hub
+              <img src="img/docker_in_CI.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Docker Hub Auto Build. Method 2
+              - Docker Hub detects commits to source repository and builds the image
+              - Container is run during image build
+              - Testing done inside container
+              <img src="img/docker_hub_auto_build.png" alt="">
+            </script>
+          </section>
+
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ##Sources and reference:
+              <br>
+              https://docs.docker.com/userguide/
+              https://training.docker.com/
+              <br>
+              By Johnny Tu
+              <br>
+              <br>
+              https://docs.docker.com/reference/commandline/run/
+            </script>
+          </section>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'plugin/zoom-js/zoom.js', async: true },
+        { src: 'plugin/notes/notes.js', async: true }
+        ]
+        });
+
+      </script>
+
+  </body>
+</html>
