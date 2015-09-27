@@ -1030,6 +1030,112 @@
         </section>
 
         <section>
+
+          <section data-markdown>
+            <script type="text/template">
+              #11. Docker Compose
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              >Docker **Compose** is a tool for creating and managing multi container applications
+
+              - Containers are all defined in a single file called "docker-compose.yml"
+              - Each container runs a particular component/service of your application.
+              <br>For example:
+                - Web front end
+                - User authentification
+                - Payments
+                - Database
+              - Container links are defined
+              - Compose will spin up all your containers in a single command
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Configuring the Compose yml file
+              - Defines the services that make up your application
+              - Each service contains instructions for building and running a container
+              <img src="img/docker_compose_yml.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Build and image instruction
+              - **Build** defines the path to the Dockerfile that will be used to build the image
+              - Container will be run using the image built
+              - **Image** defines the image that will be used to run the container
+              - All service must have either a build or image instruction
+              <img src="img/docker_compose_build_image.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Links
+              - Same concept as container linking
+              - Specify `<service name>:<alias>`
+              - If no alias is specified, the service name will be used as the alias
+              - Creates an entry for the alias inside the container's /etc/hosts file
+              <img src="img/docker_compose_links.png" alt="">
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##Running your application
+              - Use `docker-compose up`
+              - Up command will
+                - Build the image for each service
+                - Create and start the containers
+            </script>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              #12. Building Micro Service Applications
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+              ##Traditional style monolithic architecture
+              <img src="img/docker_architecture_traditional.png" alt="">
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+              ##Micro service architecture
+              <img src="img/docker_architecture_microservices.png" alt="">
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+              ##Advantages
+              - Each service can be developed and upgraded independently
+              - Easier for developers to understand
+                - Only have to focus on their service
+              - If one service goes down, the application should still run, albeit with reduced functions
+              - Application is easier to troubleshoot
+              - The whole application does not have to be committed to one technology stack
+            </script>
+          </section>
+          
+          <section data-markdown>
+            <script type="text/template">
+            </script>
+          </section>
+          
+        </section>
+
+        <section>
           <section data-markdown>
             <script type="text/template">
               ##Sources and reference:
