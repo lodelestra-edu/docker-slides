@@ -1058,7 +1058,17 @@
               ##Configuring the Compose yml file
               - Defines the services that make up your application
               - Each service contains instructions for building and running a container
-              <img src="img/docker_compose_yml.png" alt="">
+              ```
+              version: '2'
+              services:
+                javaclient:
+                  build: .
+                  command: java HelloWorld
+                  links:
+                  - redis
+                redis:
+                  image: redis
+              ```
             </script>
           </section>
 
@@ -1069,7 +1079,14 @@
               - Container will be run using the image built
               - **Image** defines the image that will be used to run the container
               - All service must have either a build or image instruction
-              <img src="img/docker_compose_build_image.png" alt="">
+              ```
+              version: '2'
+              services:
+                javaclient:
+                  build: . # Build image using Dockerfile in current directory
+                redis:
+                  image: redis # Use the latest redis image from DockerHub
+              ```
             </script>
           </section>
 
@@ -1080,7 +1097,17 @@
               - Specify `<service name>:<alias>`
               - If no alias is specified, the service name will be used as the alias
               - Creates an entry for the alias inside the container's /etc/hosts file
-              <img src="img/docker_compose_links.png" alt="">
+              ```
+              version: '2'
+              services:
+                javaclient:
+                  build: .
+                  command: java HelloWorld
+                  links: # <================
+                  - redis
+                redis:
+                  image: redis
+              ```
             </script>
           </section>
 
