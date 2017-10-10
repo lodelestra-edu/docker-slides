@@ -852,10 +852,11 @@
               - Volume paths specified must be absolute
 
               ```
-              #Execute a new container and mount the folder /myvolume into its file system
-              docker run -d -P -v /myvolume nginx:1.9.4
+              #Execute a new container and mount the named volume 'testvolume' to the folder /myvolume into its file system
+              docker run -d -P -v testvolume:/myvolume nginx:1.9.4
               #Execute a new container and map the /data/src folder from the host into the /test/src folder in the container
               docker run -i -t -v /data/src:/test/src nginx:1.9.4
+              docker run -d -v "$(pwd)"/target:/app nginx
               ```
             </script>
           </section>
