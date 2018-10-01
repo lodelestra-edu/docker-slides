@@ -950,7 +950,7 @@
 
           <section data-markdown>
             <script type="text/template">
-              ##Linking Containers
+              ##Linking Containers (Legacy)
               >**Linking** is a communication method between containers which allows them to securely transfer data from one to another
 
               - Source and recipient containers
@@ -991,6 +991,59 @@
                 - Container with Tomcat running
                 - Container with MySQL running
                 - Application on Tomcat needs to connect to MySQL
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ##bridge networks
+              >In terms of Docker, a bridge network allows containers connected to the same bridge network to communicate, while providing isolation from containers which are not connected to that bridge network.
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###Default bridge
+              Create by default when you start Docker and newly-started containers connect to it unless otherwise specified.
+              - Containers can only access each other by IP addresses, unless you use the --link option
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              ###User-defined bridges
+              <!-- User-defined bridge: User-defined bridge networks are superior to the default bridge network. -->
+              - User-defined bridges provide better isolation and interoperability between containerized applications.
+                - Containers connected to the same user-defined bridge network automatically expose all ports to each other, and no ports to the outside world.
+              - User-defined bridges provide automatic DNS resolution between containers.
+                - Containers can resolve each other by name or alias.
+              - Containers can be attached and detached on the fly
+            </script>
+          </section>
+
+          <section data-markdown>
+            <script type="text/template">
+              Create a user-defined bridge network  
+              `$ docker network create my-net`  
+              Display create options   
+              `$ docker network create --help`
+
+              ---
+              Remove a user-defined bridge network  
+              `$ docker network rm my-net`
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              Connect a container to a user-defined bridge  
+              `$ docker create --name my-nginx --network my-net --publish 8080:80 nginx:latest`  
+
+              ---
+              connect a running container to an existing user-defined bridge  
+              `$ docker network connect my-net my-nginx`  
+              Disconnect a container from a user-defined bridge  
+              `$ docker network disconnect my-net my-nginx`
+
             </script>
           </section>
         </section>
