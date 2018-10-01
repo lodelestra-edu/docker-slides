@@ -1056,7 +1056,7 @@
               - Defines the services that make up your application
               - Each service contains instructions for building and running a container
               ```
-              version: '2'
+              version: '3'
               services:
                 javaclient:
                   build: .
@@ -1077,7 +1077,7 @@
               - **Image** defines the image that will be used to run the container
               - All service must have either a build or image instruction
               ```
-              version: '2'
+              version: '3'
               services:
                 javaclient:
                   build: . # Build image using Dockerfile in current directory
@@ -1095,7 +1095,7 @@
               - If no alias is specified, the service name will be used as the alias
               - Creates an entry for the alias inside the container's /etc/hosts file
               ```
-              version: '2'
+              version: '3'
               services:
                 javaclient:
                   build: .
